@@ -22,9 +22,11 @@ namespace accountinfo
         {
             AccountInfoService ais = new AccountInfoService();
 
-            serialTextBox.Text = ais.getSerial();
+            serialTextBox.Text = ais.serial;
 
             computerNameLabel.Text = Environment.MachineName;
+
+            adobeAccountTextBox.Text = ais.registerWithServer();
 
         }
     }

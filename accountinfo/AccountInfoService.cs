@@ -7,6 +7,7 @@ using System.Management;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Net;
 
 namespace accountinfo
 {
@@ -14,22 +15,45 @@ namespace accountinfo
     {
 
         public Config config;
+        public String serial;
 
         public AccountInfoService()
         {
             this.loadConfig();
+            this.getSerial();
         }
 
-        public String getSerial()
+        public void getSerial()
         {
            
-            String serial = "";
             ManagementClass wmi = new ManagementClass("Win32_Bios");
             foreach (ManagementObject bios in wmi.GetInstances())
             {
-                serial = bios.Properties["Serialnumber"].Value.ToString().Trim();
+                this.serial = bios.Properties["Serialnumber"].Value.ToString().Trim();
             }
-            return serial;
+            
+        }
+
+        public String registerWithServer()
+        {
+            WebRequest request = WebRequest.Create(config.url);
+            request.Method = "POST";
+            String data = String.Format("computer[serial]={0}&computer[name]={1}",this.serial,Environment.MachineName);
+            byte[] bytes = Encoding.UTF8.GetBytes(data);
+            request.ContentLength = bytes.Length;
+
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(bytes, 0, bytes.Length);
+
+            WebResponse response = request.GetResponse();
+            Stream stream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(stream);
+
+            var result = reader.ReadToEnd();
+            stream.Dispose();
+            reader.Dispose();
+
+            return result;
         }
 
         private void loadConfig()
@@ -41,6 +65,7 @@ namespace accountinfo
             DataContractJsonSerializer jser = new DataContractJsonSerializer(typeof(Config));
             this.config = (Config)jser.ReadObject((Stream)r);
         }
+
     }
 
     [DataContract]

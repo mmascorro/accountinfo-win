@@ -30,6 +30,7 @@
         {
             this.computerNameLabel = new System.Windows.Forms.Label();
             this.serialTextBox = new System.Windows.Forms.TextBox();
+            this.adobeAccountTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // computerNameLabel
@@ -37,8 +38,9 @@
             this.computerNameLabel.AutoSize = true;
             this.computerNameLabel.Location = new System.Drawing.Point(37, 149);
             this.computerNameLabel.Name = "computerNameLabel";
-            this.computerNameLabel.Size = new System.Drawing.Size(0, 13);
+            this.computerNameLabel.Size = new System.Drawing.Size(80, 13);
             this.computerNameLabel.TabIndex = 1;
+            this.computerNameLabel.Text = "computer name";
             // 
             // serialTextBox
             // 
@@ -49,15 +51,23 @@
             this.serialTextBox.Size = new System.Drawing.Size(180, 49);
             this.serialTextBox.TabIndex = 2;
             // 
+            // adobeAccountTextBox
+            // 
+            this.adobeAccountTextBox.Location = new System.Drawing.Point(40, 205);
+            this.adobeAccountTextBox.Name = "adobeAccountTextBox";
+            this.adobeAccountTextBox.Size = new System.Drawing.Size(180, 20);
+            this.adobeAccountTextBox.TabIndex = 3;
+            // 
             // AccountInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.adobeAccountTextBox);
             this.Controls.Add(this.serialTextBox);
             this.Controls.Add(this.computerNameLabel);
             this.Name = "AccountInfo";
-            this.Text = "Form1";
+            this.Text = "Account Info";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -68,6 +78,7 @@
 
         private System.Windows.Forms.Label computerNameLabel;
         private System.Windows.Forms.TextBox serialTextBox;
+        private System.Windows.Forms.TextBox adobeAccountTextBox;
 
     }
 }

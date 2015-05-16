@@ -13,14 +13,50 @@ namespace accountinfo
 {
     class AccountInfoService
     {
-
         public Config config;
         public String serial;
+        public String remoteName;
+        public String account;
 
         public AccountInfoService()
         {
             this.loadConfig();
             this.getSerial();
+            this.getRemoteInfo();
+        }
+
+        public void getRemoteInfo()
+        {
+            WebRequest request = WebRequest.Create(config.url + "/computers/info/" + this.serial);
+            request.Method = "GET";
+
+            WebResponse response = request.GetResponse();
+            Stream stream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(stream);
+
+            var result = reader.ReadToEnd();
+            stream.Dispose();
+            reader.Dispose();
+
+            if (result == "0")
+            {
+                this.remoteName = "NOT REGISTERED";
+                this.account = "";
+            }
+            else
+            {
+                string[] remoteInfo = result.Split(',');
+                if (remoteInfo.Length == 1)
+                {
+                    this.remoteName = remoteInfo[0];
+                    this.account = "No Account";
+                }
+                else
+                {
+                    this.remoteName = remoteInfo[0];
+                    this.account = remoteInfo[1];
+                }
+            }
         }
 
         public void getSerial()
@@ -36,7 +72,7 @@ namespace accountinfo
 
         public String registerWithServer()
         {
-            WebRequest request = WebRequest.Create(config.url);
+            WebRequest request = WebRequest.Create(config.url + "/computers/register");
             request.Method = "POST";
             String data = String.Format("computer[serial]={0}&computer[name]={1}",this.serial,Environment.MachineName);
             byte[] bytes = Encoding.UTF8.GetBytes(data);
@@ -58,7 +94,6 @@ namespace accountinfo
 
         private void loadConfig()
         {
-           
             String configPath = System.IO.Path.Combine(".","config.json");
             String json = File.ReadAllText(configPath, Encoding.UTF8);
             MemoryStream r = new MemoryStream(Encoding.UTF8.GetBytes(json));

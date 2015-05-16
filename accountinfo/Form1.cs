@@ -13,6 +13,8 @@ namespace accountinfo
 {
     public partial class AccountInfo : Form
     {
+        private AccountInfoService ais;
+
         public AccountInfo()
         {
             InitializeComponent();
@@ -20,14 +22,20 @@ namespace accountinfo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            AccountInfoService ais = new AccountInfoService();
+            this.ais = new AccountInfoService();
 
             serialTextBox.Text = ais.serial;
 
-            computerNameLabel.Text = Environment.MachineName;
+            localComputerNameLabel.Text = Environment.MachineName;
 
-            adobeAccountTextBox.Text = ais.registerWithServer();
+            this.ais.getRemoteInfo();
+            remoteComputerNameLabel.Text = this.ais.remoteName;
+            adobeAccountTextBox.Text = this.ais.account;
+        }
 
+        private void registerBtn_Click(object sender, EventArgs e)
+        {
+            this.ais.registerWithServer();
         }
     }
 }

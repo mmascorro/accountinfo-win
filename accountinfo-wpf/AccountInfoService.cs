@@ -71,6 +71,7 @@ namespace accountinfo
         {
             WebRequest request = WebRequest.Create(config.url + "/computers/register");
             request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
             String data = String.Format("computer[serial]={0}&computer[name]={1}", serial, Environment.MachineName);
             byte[] bytes = Encoding.UTF8.GetBytes(data);
             request.ContentLength = bytes.Length;

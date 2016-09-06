@@ -26,6 +26,7 @@ namespace accountinfo
         {
             WebRequest request = WebRequest.Create(config.url + "/computers/info/" + serial);
             request.Method = "GET";
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
             WebResponse response = request.GetResponse();
             Stream stream = response.GetResponseStream();
